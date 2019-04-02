@@ -1,22 +1,25 @@
 package com.company;
 import java.io.*;
 import java.net.*;
+import java.util.List;
+import java.util.Scanner;
 
 public class MyClient {
-    //public static void main (String[] args) throws Exception{
-    public void Connect (String serverName, int serverPort, String message) throws Exception{
-//        if(args.length != 3){
-//            System.out.println("Usage: java ClientSide Hostname port message");
-//            System.exit(0);
-//        }
-//
-//        String serverName = args[0];
-//        int serverPort = Integer.parseInt(args[1]);
-//        String message = args[2];
 
+    public List<MyWorker> Connect (String serverName, int serverPort, String message) throws Exception{
         Socket s = new Socket(serverName, serverPort);
+        //Scanner in = new Scanner(s.getInputStream());
+        ObjectInputStream in = new ObjectInputStream(s.getInputStream());
         DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-        dos.writeUTF(message);
+        dos.writeUTF(message+"\n");
+        dos.writeUTF("bye\n");
+        String line = "";
+//        while (in.hasNextLine()) {
+//            line = in.nextLine();
+//            System.out.println("line: " + line);
+//        }
+        List<MyWorker> tempWorkers = (List<MyWorker>) in.readObject();
         dos.close();
+        return tempWorkers;
     }
 }

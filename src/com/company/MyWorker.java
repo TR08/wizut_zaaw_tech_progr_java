@@ -1,6 +1,6 @@
 package com.company;
 
-public class MyWorker {
+public class MyWorker implements java.io.Serializable{
     private String id, name, surname, position, phoneNum;
     private int salary;
 
@@ -19,10 +19,12 @@ public class MyWorker {
     public void setPosition(String val){
         switch(val){
             case "D":
+            case "d":
             case "Dyrektor":
                 position = "Dyrektor";
                 break;
             case "H":
+            case "h":
             case "Handlowiec":
                 position = "Handlowiec";
                 break;

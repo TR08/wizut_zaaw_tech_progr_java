@@ -1,0 +1,21 @@
+﻿Harmonogram realizacji prac laboratoryjnych S2 (15 godzin dydaktycznych):
+Lab 1) 28.02.2019: omówienie wymagań instrukcji laboratoryjnych, implementacja na zajęciach FEAT#1
+Lab 2) 14.03.2019: implementacja na zajęciach FEAT#2
+Lab 3) 28.03.2019: oddanie prac FEAT#1 FEAT#2, implementacja na zajęciach FEAT#3
+Lab 4) 11.04.2019: oddanie pracy FEAT#3, implementacja na zajęciach FEAT#4
+Lab 5) 25.04.2019: oddanie pracy FEAT#4, implementacja na zajęciach FEAT#5 
+Lab 6) 16.05.2019: oddanie pracy FEAT#5, implementacja na zajęciach FEAT#6
+Lab 7) 30.05.2019: oddanie pracy FEAT#6
+Lab 8) 13.06.2019 (45 minut): uzupełnienie brakujących prac i wpisy do indeksów
+
+-------------------------------------------------------------------------------
+
+Harmonogram realizacji prac laboratoryjnych N2 (12 godzin dydaktycznych):
+Lab 1) 09.03.2019: omówienie wymagań instrukcji laboratoryjnych, implementacja na zajęciach FEAT#1
+Lab 2) 16.03.2019: oddanie pracy FEAT#1, implementacja na zajęciach FEAT#2
+Lab 3) 23.03.2019: oddanie pracy FEAT#2, implementacja na zajęciach FEAT#3 
+Lab 4) 30.03.2019: oddanie pracy FEAT#3, implementacja na zajęciach FEAT#4
+Lab 5) 13.04.2019: oddanie pracy FEAT#4, implementacja na zajęciach FEAT#6
+Lab 6) 13.05.2019: oddanie pracy FEAT#6, uzupełnienie brakujących prac i wpisy do indeksów
+
+UWAGA: Na studiach N2 !!!NIE JEST!!! wymagane wykonanie FEAT#5 (JNDI)

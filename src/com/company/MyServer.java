@@ -1,6 +1,8 @@
 package com.company;
 import java.io.*;
 import java.net.*;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class MyServer implements Runnable {
@@ -10,29 +12,37 @@ public class MyServer implements Runnable {
         incoming = i;
     }
 
-    public void Start() throws Exception {
-        ServerSocket ss = new ServerSocket(1111);
-
-    }
-
     public void run(){
         try{
             try{
                 InputStream inStream = incoming.getInputStream();
-                OutputStream outStream = incoming.getOutputStream();
+                ObjectOutputStream outStream = new ObjectOutputStream(incoming.getOutputStream());
 
                 Scanner in = new Scanner(inStream);
                 PrintWriter out = new PrintWriter(outStream, true);
-                out.println("Hello! Enter BYE to exit.");
+                //out.println("Connected to server.");
+                //outStream.writeBytes("Connected to server.");
 
                 boolean done = false;
                 while (!done && in.hasNextLine()){
                     String line = in.nextLine();
-                    out.println("Echo: "+line);
-                    if (line.trim().equals("BYE")) done = true;
+                    //System.out.println("Echo: "+line);
+                    if (line.trim().equalsIgnoreCase("BYE")) {
+                        done = true;
+                    }
+                    else if (line.trim().equalsIgnoreCase("GET")){
+                        MySQLDB db = new MySQLDB();
+                        db.Connect();
+                        //out.println("DB connected.");
+                        //outStream.writeBytes("DB connected.");
+                        List<MyWorker> tempWorkers;
+                        tempWorkers = db.GetDataFromDB();
+                        outStream.writeObject(tempWorkers);
+                    }
                 }
-            }
-            finally {
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
                 incoming.close();
             }
         }

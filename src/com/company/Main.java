@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Main {
     private static List<MyWorker> workers = new ArrayList<>();
@@ -12,7 +14,22 @@ public class Main {
     public static void main(String[] args) throws Exception {
         boolean toRunOrNotToRun = true;
 
-        //MyServer serv = new MyServer();
+        new Thread(() -> {
+            try {
+                int i = 1;
+                ServerSocket s = new ServerSocket(8189);
+                while (true) {
+                    Socket incoming = s.accept();
+                    System.out.println("Spawning " + i);
+                    Runnable r = new MyServer(incoming);
+                    Thread t = new Thread(r);
+                    t.start( );
+                    i++;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
 
         while(toRunOrNotToRun){
             //System.out.print("\033[H\033[2J");
@@ -27,9 +44,6 @@ public class Main {
             System.out.print("q - Wyjdź\n\n");
             System.out.print("Wybór> ");
             String choice = br.readLine();
-            //System.out.print("###"+choice+"###\n");
-            //System.out.print(choice.equals("q")+"###\n");
-            //if (choice.equals("q")) break;
             switch (choice){
                 case "q":
                     toRunOrNotToRun = false;
@@ -60,9 +74,14 @@ public class Main {
         printLabel("Adres");
         String address = br.readLine();
         printLabel("Port");
-        int port = Integer.parseInt(br.readLine());
+        String portTemp = br.readLine();
+        int port = 8189;
+        try {
+            port = Integer.parseInt(portTemp);
+        } catch (Exception e) {}
         MyClient client1 = new MyClient();
-        client1.Connect(address, port, "hello");
+        if (address.equals("")) address = "localhost";
+        workers = client1.Connect(address, port, "GET\r\n");
     }
 
     private void BackupWorkers() throws IOException, SQLException {
@@ -75,10 +94,10 @@ public class Main {
         List<MyWorker> tempWorkers = new ArrayList<>();
         MySQLDB db = new MySQLDB();
         db.Connect();
-        if (choice.equals("Z")){
+        if (choice.equalsIgnoreCase("Z")){
 
         }
-        else if (choice.equals("O")){
+        else if (choice.equalsIgnoreCase("O")){
             tempWorkers = db.GetDataFromDB();
             printLabel("Liczba znalezionych rekordów");
             System.out.print(tempWorkers.size()+"\n");
@@ -89,15 +108,15 @@ public class Main {
         temp = "asd";
         do {
             temp = br.readLine();
-        } while (!(temp.equals("")) && !(temp.equals("q")));
-        if (temp.equals("q")) {
+        } while (!(temp.equals("")) && !(temp.equalsIgnoreCase("q")));
+        if (temp.equalsIgnoreCase("q")) {
             db.Close();
             return;
         }
-        if (choice.equals("Z")){
+        if (choice.equalsIgnoreCase("Z")){
             db.PutDataToDB(workers);
         }
-        else if (choice.equals("O")) {
+        else if (choice.equalsIgnoreCase("O")) {
             workers = tempWorkers;
         }
         db.Close();
@@ -144,8 +163,8 @@ public class Main {
                 temp = "asd";
                 do {
                     temp = br.readLine();
-                } while (!(temp.equals("")) && !(temp.equals("q")));
-                if (temp.equals("q")) break;
+                } while (!(temp.equals("")) && !(temp.equalsIgnoreCase("q")));
+                if (temp.equalsIgnoreCase("q")) break;
                 else wrkrs.remove(i);
                 break;
             }
@@ -194,8 +213,8 @@ public class Main {
             String temp = "asd";
             do {
                 temp = br.readLine();
-            } while (!(temp.equals("")) && !(temp.equals("q")));
-            if (temp.equals("q")) break;
+            } while (!(temp.equals("")) && !(temp.equalsIgnoreCase("q")));
+            if (temp.equalsIgnoreCase("q")) break;
         }
     }
 
@@ -207,8 +226,8 @@ public class Main {
         System.out.print("[D]yrektor/[H]andlowiec: ");
         do {
             temp = br.readLine();
-        } while (!(temp.equals("D")) && !(temp.equals("H")));
-        if (temp.equals("D")) newWorker = new WorkerDirector();
+        } while (!(temp.equalsIgnoreCase("D")) && !(temp.equalsIgnoreCase("H")));
+        if (temp.equalsIgnoreCase("D")) newWorker = new WorkerDirector();
         else newWorker = new WorkerTrader();
         newWorker.setPosition(temp);
 
@@ -279,8 +298,8 @@ public class Main {
         temp = "asd";
         do {
             temp = br.readLine();
-        } while (!(temp.equals("")) && !(temp.equals("q")));
-        if (temp.equals("q")) return null;
+        } while (!(temp.equals("")) && !(temp.equalsIgnoreCase("q")));
+        if (temp.equalsIgnoreCase("q")) return null;
         return newWorker;
     }
 
