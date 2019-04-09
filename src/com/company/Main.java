@@ -2,6 +2,9 @@ package com.company;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +16,16 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         boolean toRunOrNotToRun = true;
+
+        try{
+            ValidatorImpl aValidator = new ValidatorImpl();
+            Naming.rebind("validator", aValidator);
+            System.out.println("Login system ready");
+        } catch(RemoteException e){
+            e.printStackTrace();
+        } catch(MalformedURLException me){
+            System.out.println("MalformedURLException "+me);
+        }
 
         new Thread(() -> {
             try {
@@ -47,6 +60,7 @@ public class Main {
             switch (choice){
                 case "q":
                     toRunOrNotToRun = false;
+                    System.exit(0);
                     break;
                 case "1":
                     new Main().ListWorkers(workers);
@@ -71,6 +85,10 @@ public class Main {
     private void GetFromTheNet() throws Exception {
         System.out.print("Pobierz dane z sieci\n\n");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        printLabel("Login");
+        String username = br.readLine();
+        printLabel("Hasło");
+        String pass = br.readLine();
         printLabel("Adres");
         String address = br.readLine();
         printLabel("Port");
@@ -81,7 +99,7 @@ public class Main {
         } catch (Exception e) {}
         MyClient client1 = new MyClient();
         if (address.equals("")) address = "localhost";
-        workers = client1.Connect(address, port, "GET\r\n");
+        workers = client1.Connect(address, port, "GET\r\n", username, pass);
     }
 
     private void BackupWorkers() throws IOException, SQLException {
